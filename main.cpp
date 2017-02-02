@@ -87,7 +87,7 @@ int main(int argc, char** argv) {
 	vertices = calculateVertices(number_vertices);
 	
 	Vertex prev_vertex = Vertex(rand() % SCREEN_WIDTH, rand() % SCREEN_HEIGHT);
-	int prev_vertex_index = rand() % vertices.size();
+	int prev_vertex_index = rand() % number_vertices;
 	int next_vertex_index = 0;
 
 	//Initialize Colors for drawing.
@@ -144,6 +144,7 @@ int main(int argc, char** argv) {
 							number_vertices--;
 							vertices = calculateVertices(number_vertices);
 						}
+						break;
 					default:
 						break;
 				}
@@ -151,11 +152,43 @@ int main(int argc, char** argv) {
 		}
 
 		//Get the next vertex as per chaos game rule.
+		if (prev_vertex_index >= number_vertices) {
+			prev_vertex_index = rand() % vertices.size();
+			next_vertex_index = 0;
+			continue;
+		}
+		ofs << prev_vertex_index << "\n";
+
 		Vertex vert = vertices[prev_vertex_index];
-		next_vertex_index = rand() % vertices.size();
-		while (next_vertex_index == prev_vertex_index)
-			next_vertex_index = rand() % vertices.size();
+		//Chaos Rule 1
 		
+		//next_vertex_index = rand() % vertices.size();
+		//while (next_vertex_index == prev_vertex_index)
+		//	next_vertex_index = rand() % vertices.size();
+		
+		bool prob = rand() % 2;
+		bool step = rand() % 2; //0 or 1
+		//Chaos Rule 2
+		/*
+		if (!step) {
+			next_vertex_index = ((((next_vertex_index - 1) % number_vertices) + number_vertices) % number_vertices);
+		}
+		else {
+			next_vertex_index = ((((next_vertex_index + 1) % number_vertices) + number_vertices) % number_vertices);
+		}
+		*/
+		//Chaos Rule 3
+		
+		if (!step) {
+			next_vertex_index = ((((next_vertex_index - 2) % number_vertices) + number_vertices) % number_vertices);
+		}
+		else {
+			next_vertex_index = ((((next_vertex_index + 2) % number_vertices) + number_vertices) % number_vertices);
+		}
+		
+		
+
+
 		//Set drawing color of points.
 		//SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
 		SDL_Color chosen_color;
