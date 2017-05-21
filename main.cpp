@@ -52,11 +52,8 @@ vector<Vertex> calculateVertices(int n) {
 	return vertices;
 }
 
-int mappingFunc(int x, int y) {
-	return pow((x - y),3);
-}
-
 int main(int argc, char** argv) {
+	//Initialize SDL
 	SDL_Init(SDL_INIT_VIDEO);
 
 	SDL_Window *win = SDL_CreateWindow("Chaos Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
@@ -74,8 +71,6 @@ int main(int argc, char** argv) {
 
 	bool quit = false;
 	SDL_Event e;
-
-	
 
 	//File for debug logging.
 	ofstream ofs("log.txt", ofstream::out);
@@ -112,6 +107,7 @@ int main(int argc, char** argv) {
 
 	//Main loop
 	while (!quit) {
+		//Event catching
 		while (SDL_PollEvent(&e) != 0) {
 			if (e.type == SDL_QUIT) {
 				quit = true;
@@ -199,15 +195,15 @@ int main(int argc, char** argv) {
 		int xdiff = prev_vertex.x - vert.x;
 		int ydiff = prev_vertex.y - vert.y;
 
+		//Select new point based on a restricted random walk.
 		Vertex next_vertex = Vertex(prev_vertex.x - xdiff / jump_distance, prev_vertex.y - ydiff / jump_distance);
 
 		//Update the previously chosen vertex to the currently chosen vertex.
 		prev_vertex = next_vertex;
 		prev_vertex_index = next_vertex_index;
 
-		
-		//if(mappingFunc(next_vertex.x,next_vertex.y) >= 4)
-			SDL_RenderDrawPoint(ren, next_vertex.x, next_vertex.y);
+		//Draw point
+		SDL_RenderDrawPoint(ren, next_vertex.x, next_vertex.y);
 
 		//Update Screen
 		SDL_RenderPresent(ren);
@@ -221,8 +217,3 @@ int main(int argc, char** argv) {
 
 	return 0;
 }
-
-/*
-NOTES:
-DUCK FRACTAL OCCURS AT 4 VERTICES, NEAR MAX POSSIBLE JUMP SIZE
-*/
